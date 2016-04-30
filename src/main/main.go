@@ -13,16 +13,11 @@ type Person struct {
 }
 
 func main() {
-    http.HandleFunc("/", someFunc)
-    http.HandleFunc("/sally", personController)
+    http.HandleFunc("/", peopleController)
     http.ListenAndServe(":8080", nil)
 }
 
-func someFunc(w http.ResponseWriter, req *http.Request)  {
-    w.Write([]byte("Hello universe"))
-}
-
-func personController(w http.ResponseWriter, req *http.Request) {
+func peopleController(w http.ResponseWriter, req *http.Request) {
 
     session, err := mgo.Dial("localhost")
     if err != nil {
@@ -30,7 +25,7 @@ func personController(w http.ResponseWriter, req *http.Request) {
     }
     defer session.Close()
 
-    c := session.DB("test").C("people")
+    c := session.DB("go-people").C("people")
     err = c.Insert(&Person{"Ale", "+494944004"},
                    &Person{"Cla", "+345433344"})
     if err != nil {
